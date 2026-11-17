@@ -112,25 +112,6 @@ $(NAME): $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) -Llibft -lft -o $(NAME)
 ```
 
-### Checking the norm
-
-```sh
-norminette ft_*.c libft.h
-```
-
-## Detailed description of the library
-
-All prototypes live in `libft.h`, which also defines the `t_list` structure used by
-Part 3:
-
-```c
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}	t_list;
-```
-
 ### Part 1 — Libc functions
 
 #### Character classification
@@ -228,46 +209,24 @@ of crashing:
 These checks never change the result for valid input: they only replace undefined
 behaviour with a predictable return value.
 
+
 ## Resources
 
-### Documentation and references
+- `man` pages for each libc function (`man strlcpy`, `man memmove`, ...)
+- [Linked lists in C (GeeksforGeeks)](https://www.geeksforgeeks.org/linked-list-data-structure/)
+- [C Tutorial (W3Schools)](https://www.w3schools.com/c/index.php)
+- [KooR.fr – C language reference](https://koor.fr/C/) (some of the commented test examples at the bottom of the source files are adapted from it)
+- [IBM Documentation](https://www.ibm.com/docs/fr) (some of the commented test examples at the bottom of the source files are adapted from it)
 
-- The project subject: `en.subject.pdf` (Libft, version 19.3)
-- `man` pages of the original functions — the authoritative specification for Part 1:
-  `man 3 strlen`, `man 3 memmove`, `man 3 strlcpy`, `man 3 calloc`, `man 3 atoi`, …
-- [cppreference — C string library](https://en.cppreference.com/w/c/string/byte)
-- [The Open Group Base Specifications (POSIX)](https://pubs.opengroup.org/onlinepubs/9699919799/)
-- *The C Programming Language* — Kernighan & Ritchie (K&R), for the idioms behind
-  most of these functions
-- [OpenBSD source of `strlcpy`/`strlcat`](https://cvsweb.openbsd.org/src/lib/libc/string/)
-  and Todd Miller's paper *strlcpy and strlcat — consistent, safe string copy and
-  concatenation*, which explain why these two return the length they tried to create
-- [42 Norm](https://github.com/42School/norminette) — the `norminette` linter
-- `valgrind --leak-check=full` and the compiler sanitizers
-  (`-fsanitize=address,undefined`) for checking memory handling
+### AI usage
 
-Note for glibc systems: `strlcpy`, `strlcat` and `bzero` are not provided by default,
-so comparing against the system versions requires `#include <bsd/string.h>` and the
-`-lbsd` flag.
+AI (Claude) was used as a helper to:
+- translate `man` pages and other English texts,
+- explain parts of the `man` pages I did not understand, for example what a function really does,
+- explain concepts (pointers to pointers, linked lists, how a Makefile works),
+- write the README.
 
-### Use of AI
+All code was tested and checked before submission.
 
-AI (Claude, via Claude Code) was used on this project for the following tasks only:
-
-- **Defensive parameter checks:** adding the `NULL`-pointer, `NULL`-callback and
-  negative-file-descriptor guards described above to the existing functions, across
-  all `ft_*.c` files.
-- **Norm-driven refactoring that those guards made necessary:** `ft_atoi`,
-  `ft_memmove`, `ft_strnstr` and `ft_split` were already at the 25-line limit of the
-  Norm, so their bodies were tightened to make room for the new checks — collapsing
-  single-statement blocks, routing the non-overlapping case of `ft_memmove` through
-  `ft_memcpy`, and moving the fill loop of `ft_split` into a `static` helper
-  (`fill_words`). Behaviour was left unchanged.
-- **Testing:** writing throwaway test programs used to check the result — one
-  comparing every function's output against the system libc on valid input, one
-  passing `NULL` and invalid arguments to every function to confirm nothing
-  segfaults. Both were run under `-fsanitize=address,undefined`. These test files
-  are not part of the repository.
-- **This README.**
 
 The implementation of the library's functions themselves is my own work.
